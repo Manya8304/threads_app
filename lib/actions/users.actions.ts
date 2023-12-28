@@ -5,6 +5,7 @@ import User from "../models/users.models"
 import { revalidatePath } from "next/cache";
 import { FilterQuery, SortOrder } from "mongoose";
 import Thread from "../models/thread.models";
+import Community from "../models/community.models";
 
 //Now we need to connect to our database, i.e. mongoose, so we created :- "mongoose.ts"
 interface Params {
@@ -58,11 +59,10 @@ export async function fetchUser(userId: string) {
     try {
         connectToDB();
         return await User.findOne({ id: userId })
-        /*
         .populate({
             path: 'communities',
             model: Community
-        })*/
+        });
     } catch (error: any) {
         throw new Error(`Failed to fetch user: ${error.message}`); 
     }
@@ -74,6 +74,38 @@ export async function fetchUser(userId: string) {
  relationships between documents in different collections.
  Hence, this function will help us to find all the different communities, which are joined by the currently logged in user.
 */
+
+export async function fetchUserPosts(userId: string) {
+    try {
+      connectToDB();
+  
+      // Find all threads authored by the user with the given userId
+      const threads = await User.findOne({ id: userId }).populate({
+        path: "threads",
+        model: Thread,
+        populate: [
+          {
+            path: "community",
+            model: Community,
+            select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+          },
+          {
+            path: "children",
+            model: Thread,
+            populate: {
+              path: "author",
+              model: User,
+              select: "name image id", // Select the "name" and "_id" fields from the "User" model
+            },
+          },
+        ],
+      });
+      return threads;
+    } catch (error) {
+      console.error("Error fetching user threads:", error);
+      throw error;
+    }
+  }
 
 export async function fetchUsers({
     userId,
@@ -113,7 +145,7 @@ export async function fetchUsers({
         }
 
         //as we have done:- searching, fetching and skipping, now we are gonna do "sorting"
-        const sortOptions = { createdAt: sortBy};
+        const sortOptions = { createdAt: sortBy };
         
         //now we will finally get the users based on all of these searching, skipping and sorting
         const usersQuery = User.find(query)
@@ -175,7 +207,8 @@ export async function getActivity(userId: string) {
 
        return replies;
     } catch (error) {
-        
+        console.error("Error fetching replies: ", error);
+        throw error;
     }
 }
 

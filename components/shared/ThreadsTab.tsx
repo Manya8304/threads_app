@@ -1,6 +1,7 @@
 import { fetchUserPosts } from "@/lib/actions/thread.actions";
 import { redirect } from "next/navigation";
 import ThreadCard from "../cards/ThreadCard";
+import { fetchCommunityPosts } from "@/lib/actions/community.actions";
 
 interface Props{
     currentUserId: string;
@@ -10,8 +11,12 @@ interface Props{
 
 const ThreadsTab = async ( { currentUserId, accountId, accountType} : Props) => {
     //TODO: Now, we need to fetch all th threads that belong to a partiuclar user, in order to display it on the profile page of that user
-    let result = await fetchUserPosts(accountId); //coming from database
-
+    let result: any;
+    if(accountType === 'Community'){
+        result = await fetchCommunityPosts(accountId);
+    } else {
+       result = await fetchUserPosts(accountId); //coming from database
+    }
     if(!result) redirect('/');
     
     return (

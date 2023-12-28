@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useOrganization } from '@clerk/nextjs';
 import { threadValidation } from "@/lib/validations/thread";
 import * as z from 'zod';
 import { usePathname, useRouter } from 'next/navigation';
@@ -33,6 +34,7 @@ interface Props {
 function PostThread ({userId} : {userId: string}) {
     const pathname = usePathname();
     const router = useRouter();
+    const  { organization } = useOrganization();
     const form = useForm(
         {
             resolver: zodResolver(threadValidation),
@@ -45,12 +47,13 @@ function PostThread ({userId} : {userId: string}) {
 
     //this function will be called when we will click the "Post Thread" button
     const onSubmit = async (values: z.infer<typeof threadValidation>) => {
-        await createThread({
-            text: values.thread,
-            author: userId,
-            communityId: null,
-            path: pathname
-        });
+            await createThread({
+                text: values.thread,
+                author: userId,
+                communityId: organization ? organization.id : null,
+                path: pathname
+            });
+       
 
         router.push("/"); //once we have created a new thread, we want that to be visible on home page too!
     }
