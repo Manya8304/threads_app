@@ -13,11 +13,9 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CommentValidation } from "@/lib/validations/thread";
 import * as z from 'zod'; // we need "zod" for validation
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { addCommentToThread } from '@/lib/actions/thread.actions';
-//import { createThread } from '@/lib/actions/thread.actions';
-//import { updateUser } from '@/lib/actions/users.actions';
 
 interface Props{
     threadId: string;
@@ -27,8 +25,7 @@ interface Props{
 
 const Comment = ({threadId, currentUserImg, currentUserId} : Props) => {
     const pathname = usePathname();
-    const router = useRouter();
-    const form = useForm(
+    const form = useForm<z.infer<typeof CommentValidation>>(
         {
             resolver: zodResolver(CommentValidation),
             defaultValues: {

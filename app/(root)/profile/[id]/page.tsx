@@ -54,7 +54,11 @@ async function Page({ params } : { params: { id: string }}) {
                     </TabsList>
                     {/* Now, as we have displayed the number of threads created, now we also want to display the actual threads on the profile page */}
                     {profileTabs.map((tab) => (
-                        <TabsContent key={`content-${tab.label}`} value={tab.value} className="w-full text-light-1">
+                        <TabsContent 
+                            key={`content-${tab.label}`} 
+                            value={tab.value} 
+                            className="w-full text-light-1"
+                        >
                             <ThreadsTab 
                                 currentUserId={user.id}
                                 accountId={userInfo.id}

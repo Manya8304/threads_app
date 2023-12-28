@@ -1,10 +1,13 @@
 import { ClerkProvider } from "@clerk/nextjs"
 import { Inter } from 'next/font/google'
 import '../globals.css';
+import React from "react";
+import { dark } from "@clerk/themes";
+import { Metadata } from "next";
 
-export const metadata = {
-    title : 'Threads',
-    description : 'A Next.js 13 Meta Threads Application'
+export const metadata: Metadata = {
+    title : 'Auth',
+    description : 'A Next.js 13 Meta Threads Application',
 }
 
 const inter = Inter(
@@ -19,15 +22,19 @@ export default function RootLayout({
     children : React.ReactNode //type of the props
 }) {
     return ( //within this cleark provider, we are going to return an HTML page
-        <ClerkProvider> 
+        <ClerkProvider 
+            appearance={{
+                baseTheme: dark,
+            }}
+        > 
             <html lang="en">
                 <body className={`${inter.className} bg-dark-1`}> 
-                <div className="w-full justify-center items-center min-h-screen">
+                {/* <div className="w-full justify-center items-center min-h-screen"> */}
                     {children}
-                </div>
+                {/* </div> */}
                 </body>
             </html>
         </ClerkProvider>
-    )
+    );
 }
 

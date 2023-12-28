@@ -43,10 +43,10 @@ const AccountProfile = ({ user, btnTitle} : Props) => {
         {
             resolver: zodResolver(userValidation),
             defaultValues: {
-                profile_photo : user?.image || "",
-                name: user?.name || "",
-                username: user?.username || "",
-                bio: user?.bio || ""
+                profile_photo: user?.image ? user.image : "",
+                name: user?.name ? user.name : "",
+                username: user?.username ? user.username : "",
+                bio: user?.bio ? user.bio : "",
             }
         }
     );
@@ -85,7 +85,7 @@ const AccountProfile = ({ user, btnTitle} : Props) => {
         const hasImageChanged = isBase64Image(blob); //this function will come from "utils.ts" and utils are the utilities function that we can reuse across our code
         //this can also be the case that there is already a pic when we sign, so this is only going to work if we re-upload the image
         if(hasImageChanged){
-            const imgRes = await startUpload(files) //now we need to get the image response, and then we have to upload it using package called "uploadthing"
+            const imgRes = await startUpload(files); //now we need to get the image response, and then we have to upload it using package called "uploadthing"
 
             if(imgRes && imgRes[0].url)
             {

@@ -17,25 +17,12 @@ import { threadValidation } from "@/lib/validations/thread";
 import * as z from 'zod';
 import { usePathname, useRouter } from 'next/navigation';
 import { createThread } from '@/lib/actions/thread.actions';
-//import { updateUser } from '@/lib/actions/users.actions';
-
-interface Props {
-    user : {
-        id: string;
-        objectId: string;
-        username: string;
-        name: string;
-        bio: string;
-        image: string;
-    };
-    btnTitle: string;
-}
 
 function PostThread ({userId} : {userId: string}) {
     const pathname = usePathname();
     const router = useRouter();
     const  { organization } = useOrganization();
-    const form = useForm(
+    const form = useForm<z.infer<typeof threadValidation>>(
         {
             resolver: zodResolver(threadValidation),
             defaultValues: {

@@ -15,13 +15,13 @@ async function Page() {
     const activity = await getActivity(userInfo._id);
     
     return (
-        <section>
-            <h1 className="head-text mb-10">Activity</h1>
+        <>
+            <h1 className="head-text">Activity</h1>
             {/* now as we have comments, we can loop over all of those comments */}
             <section className="mt-10 flex flex-col gap-5">
                 {activity && activity.length > 0 ? (
                     <>
-                        {activity?.map((activity) => (
+                        {activity.map((activity) => (
                             <Link key={activity._id} href={`/thread/${activity.parentId}`}>
                                 <article className="activity-card">
                                     <Image 
@@ -47,7 +47,7 @@ async function Page() {
                     </p>
                 )}
             </section>
-        </section>
+        </>
     )
 }
 

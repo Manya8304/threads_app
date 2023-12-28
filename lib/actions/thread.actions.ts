@@ -118,7 +118,6 @@ return descendantThreads;
 export async function fetchThreadById(id : string) {
     connectToDB();
     try{
-        //TODO: Populate Community
         const thread = await Thread.findById(id)
         .populate({
             path: 'author',

@@ -7,6 +7,8 @@ import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchThreadById } from "@/lib/actions/thread.actions";
 import Comment from "@/components/forms/Comment";
 
+export const revalidate = 0;
+
 const Page = async ({params} : {params: { id: string }}) => {
     if(!params.id) return null;
     const user = await currentUser();
@@ -30,14 +32,14 @@ const Page = async ({params} : {params: { id: string }}) => {
                 author={thread.author}
                 community={thread.community}
                 createdAt={thread.createdAt}
-                comments={thread.comments}
+                comments={thread.children}
             />
          </div>
          {/* Here, we are creating the div for the user to add any comment below the main thread */}
          <div className="mt-7">
             <Comment 
-                threadId={thread.id}
-                currentUserImg={userInfo.image} /* This is going from clerk, therefore we used "user" */
+                threadId={params.id}
+                currentUserImg={user.imageUrl} /* This is going from clerk, therefore we used "user" */
                 currentUserId={JSON.stringify(userInfo._id)} // "id" could be a special object, hence by passing it to JSON.stringify() we are just making sure that we are working with string
             />
          </div>
@@ -47,13 +49,13 @@ const Page = async ({params} : {params: { id: string }}) => {
                 <ThreadCard
                 key={childItem._id}
                 id={thread._id}
-                currentUserId={childItem.id || ""}
+                currentUserId={user.id}
                 parentId={childItem.parentId}
                 content={childItem.text}
                 author={childItem.author}
                 community={childItem.community}
                 createdAt={childItem.createdAt}
-                comments={childItem.comments}
+                comments={childItem.children}
                 isComment //set to "true" to indicate that we can modify something within this thread card
             />
             ))}

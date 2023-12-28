@@ -9,9 +9,36 @@ interface Props{
     accountType: string;
 }
 
+interface Result {
+    name: string;
+    image: string;
+    id: string;
+    threads: {
+      _id: string;
+      text: string;
+      parentId: string | null;
+      author: {
+        name: string;
+        image: string;
+        id: string;
+      };
+      community: {
+        id: string;
+        name: string;
+        image: string;
+      } | null;
+      createdAt: string;
+      children: {
+        author: {
+          image: string;
+        };
+      }[];
+    }[];
+  }
+
 const ThreadsTab = async ( { currentUserId, accountId, accountType} : Props) => {
     //TODO: Now, we need to fetch all th threads that belong to a partiuclar user, in order to display it on the profile page of that user
-    let result: any;
+    let result: Result;
     if(accountType === 'Community'){
         result = await fetchCommunityPosts(accountId);
     } else {
@@ -35,7 +62,11 @@ const ThreadsTab = async ( { currentUserId, accountId, accountType} : Props) => 
                         : {name: thread.author.name, image: thread.author.image, id: thread.author.id}
                     } 
                     //here, we may need to update both author and community to indicate whether we are the owners of the community and whether we are the authors or somebody else's
-                    community={thread.community} //update needed(maybe)
+                    community={
+                        accountType === "Community"
+                          ? { name: result.name, id: result.id, image: result.image }
+                          : thread.community
+                      }
                     createdAt={thread.createdAt}
                     comments={thread.children}
                 />

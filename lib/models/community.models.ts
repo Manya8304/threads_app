@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const CommunitySchema = new mongoose.Schema({
     id: {
@@ -25,7 +25,7 @@ const CommunitySchema = new mongoose.Schema({
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Thread' //a reference to a thread instance stored in database
-        }
+        },
         //this means that one user can have multiple references to specific threads stored in a database
     ],
     //members is an array because multiple users can belong as members of a specific community
