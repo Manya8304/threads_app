@@ -3,11 +3,13 @@ import { currentUser } from "@clerk/nextjs";
 import UserCard from "../cards/UserCard";
 
 import { fetchCommunities } from "@/lib/actions/community.actions";
-import { fetchUsers } from "@/lib/actions/users.actions";
+import { fetchUser, fetchUsers } from "@/lib/actions/users.actions";
 
 async function RightSidebar() {
   const user = await currentUser();
   if (!user) return null;
+
+  const userInfo = await fetchUser(user.id);
 
   const similarMinds = await fetchUsers({
     userId: user.id,
@@ -29,10 +31,10 @@ async function RightSidebar() {
               {suggestedCommunities.communities.map((community) => (
                 <UserCard
                   key={community.id}
-                  id={community.id}
-                  name={community.name}
-                  username={community.username}
-                  imgUrl={community.image}
+                  id={userInfo.id}
+                  name={userInfo.name}
+                  username={userInfo.username}
+                  imgUrl={userInfo.image}
                   personType='Community'
                 />
               ))}
@@ -53,10 +55,10 @@ async function RightSidebar() {
               {similarMinds.users.map((person: any) => (
                 <UserCard
                   key={person.id}
-                  id={person.id}
-                  name={person.name}
-                  username={person.username}
-                  imgUrl={person.image}
+                  id={userInfo.id}
+                  name={userInfo.name}
+                  username={userInfo.username}
+                  imgUrl={userInfo.image}
                   personType='User'
                 />
               ))}
