@@ -39,7 +39,7 @@ const Page = async ({params} : {params: { id: string }}) => {
          <div className="mt-7">
             <Comment 
                 threadId={params.id}
-                currentUserImg={user.imageUrl} /* This is going from clerk, therefore we used "user" */
+                currentUserImg={userInfo.image} /* This is going from clerk, therefore we used "user" */
                 currentUserId={JSON.stringify(userInfo._id)} // "id" could be a special object, hence by passing it to JSON.stringify() we are just making sure that we are working with string
             />
          </div>
