@@ -3,20 +3,18 @@ import { currentUser } from "@clerk/nextjs";
 import UserCard from "../cards/UserCard";
 
 import { fetchCommunities } from "@/lib/actions/community.actions";
-import { fetchUser, fetchUsers } from "@/lib/actions/users.actions";
+import { fetchUsers } from "@/lib/actions/users.actions";
 
 async function RightSidebar() {
   const user = await currentUser();
   if (!user) return null;
-
-  const userInfo = await fetchUser(user.id);
 
   const similarMinds = await fetchUsers({
     userId: user.id,
     pageSize: 4,
   });
 
-  const suggestedCommunities = await fetchCommunities({ pageSize: 4 });
+  const suggestedCOmmunities = await fetchCommunities({ pageSize: 4 });
 
   return (
     <section className='custom-scrollbar rightsidebar'>
@@ -26,9 +24,9 @@ async function RightSidebar() {
         </h3>
 
         <div className='mt-7 flex w-[350px] flex-col gap-9'>
-          {suggestedCommunities.communities.length > 0 ? (
+          {suggestedCOmmunities.communities.length > 0 ? (
             <>
-              {suggestedCommunities.communities.map((community) => (
+              {suggestedCOmmunities.communities.map((community) => (
                 <UserCard
                   key={community.id}
                   id={community.id}
@@ -55,10 +53,10 @@ async function RightSidebar() {
               {similarMinds.users.map((person: any) => (
                 <UserCard
                   key={person.id}
-                  id={userInfo.id}
-                  name={userInfo.name}
-                  username={userInfo.username}
-                  imgUrl={userInfo.image}
+                  id={person.id}
+                  name={person.name}
+                  username={person.username}
+                  imgUrl={person.image}
                   personType='User'
                 />
               ))}
