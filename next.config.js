@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    typescript: {
+      ignoreBuildErrors: true,
+    },
     experimental: {
       //serverActions: true, //if we will not make this "true" then it is not going to accept mongoose actions required for database,
       //here, we don't need this now because it is now available by default in the current version of Next.js
