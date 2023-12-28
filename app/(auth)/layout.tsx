@@ -21,7 +21,7 @@ export default function RootLayout({
  } : {
     children : React.ReactNode //type of the props
 }) {
-    return ( //within this cleark provider, we are going to return an HTML page
+    return ( //within this clerk provider, we are going to return an HTML page
         <ClerkProvider 
             appearance={{
                 baseTheme: dark,
@@ -29,7 +29,7 @@ export default function RootLayout({
         > 
             <html lang="en">
                 <body className={`${inter.className} bg-dark-1`}> 
-                 <div className="w-full justify-center items-center min-h-screen"> 
+                 <div className="w-full flex justify-center items-center min-h-screen"> 
                     {children}
                  </div> 
                 </body>
